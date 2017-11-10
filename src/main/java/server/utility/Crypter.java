@@ -1,12 +1,11 @@
 package server.utility;
 
 import server.controller.Config;
+import com.google.gson.Gson;
 
 public class Crypter {
 
-    //test
-    //Method for encrypting
-    public static String encryptAndDecryptXor(String input) {
+    public String encrypt(String input) {
         if (Config.getEncryption()) {
             char[] key = {'L', 'Y', 'N'};
             StringBuilder output = new StringBuilder();
@@ -15,11 +14,29 @@ public class Crypter {
                 output.append((char) (input.charAt(i) ^ key[i % key.length]));
             }
 
-            return output.toString();
+            String isEncrypted = new Gson().toJson(output.toString());
+
+            return isEncrypted;
         } else {
             return input;
         }
+    }
 
+    public String decrypt(String input) {
+            if(Config.getEncryption()) {
+                  char[] key = {'L', 'Y', 'N'};
+         StringBuilder output = new StringBuilder();
+
+            for (int i = 0; i < input.length(); i++) {
+                            output.append((char) (input.charAt(i) ^ key[i % key.length]));
+                }
+
+            String isDecrypted = output.toString();
+              return isDecrypted;
+             } else {
+             return input;
+              }
 
     }
+
 }
