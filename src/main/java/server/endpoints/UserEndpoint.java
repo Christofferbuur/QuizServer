@@ -47,7 +47,6 @@ public class UserEndpoint {
         user = new Gson().fromJson(user, String.class);
         String decryptedUser = crypter.decrypt(user);
         User createdUser = mainController.createUser(new Gson().fromJson(decryptedUser, User.class));
-
         String newUser = new Gson().toJson(createdUser);
 
         if (createdUser != null) {
@@ -87,10 +86,10 @@ public class UserEndpoint {
         System.out.println(decryptedId);
 
         Boolean deletedToken = tokenController.deleteToken(new Gson().fromJson(decryptedId, Integer.class));
-
-        if (deletedToken == true) {
+        System.out.println(deletedToken);
+        if (deletedToken != true) {
             Globals.log.writeLog(this.getClass().getName(), this, "User log out", 2);
-            return Response.status(200).entity("Logged out").build();
+            return Response.status(200).entity(crypter.encrypt("User logged out")).build();
         } else {
             Globals.log.writeLog(this.getClass().getName(), this, "User failed log out", 2);
             return Response.status(400).type("text/plain").entity("Error logging out").build();
